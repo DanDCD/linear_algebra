@@ -33,43 +33,19 @@ def plot_vector_3d(vector, name, color, start=[0, 0, 0]):
     )
 
 
-# Define the plot_vector function for 2D vectors
-
-
-def plot_vector(start, vector, name, color):
-
-    return go.Scatter(
-        x=[start[0], start[0] + vector[0]],  # From the start position to the vector tip
-        y=[start[1], start[1] + vector[1]],
-        mode="lines+markers+text",
-        marker=dict(size=10, color=color),
-        line=dict(width=3, color=color),
-        text=[None, name],
-        textposition="top center",
-    )
-
 
 # Function to plot basis vectors and a given vector in their coordinate system
-
-
 def plot_basis_vectors_and_projection(e1, e2, v):
-
     # Calculate v in the coordinate system of the basis vectors
-
     projection_x = v[0] * e1
-
     projection_y = v[1] * e2
-
     result = projection_x + projection_y
 
     # we can also use the dot product to calculate the projection (these calculations are equivalent):
-
     mat = np.array([e1, e2]).T  # Create a matrix with basis vectors as columns
-
     result = np.dot(mat, v)  # Calculate the projection of v onto the basis vectors
 
     # Create subplots
-
     fig = make_subplots(
         rows=1,
         cols=2,
@@ -80,25 +56,19 @@ def plot_basis_vectors_and_projection(e1, e2, v):
     )
 
     # Plot basis vectors in the first subplot
-
-    fig.add_trace(plot_vector([0, 0], e1, "e1", "blue"), row=1, col=1)
-
-    fig.add_trace(plot_vector([0, 0], e2, "e2", "red"), row=1, col=1)
+    fig.add_trace(plot_vector(e1, "e1", "blue"), row=1, col=1)
+    fig.add_trace(plot_vector(e2, "e2", "red"), row=1, col=1)
 
     # Plot the original vector and its projections in the second subplot
-
-    fig.add_trace(plot_vector([0, 0], result, f"{v}", "purple"), row=1, col=2)
-
+    fig.add_trace(plot_vector(result, f"{v}", "purple"), row=1, col=2)
     fig.add_trace(
-        plot_vector([0, 0], projection_x, f"{v[0]} * e1", "blue"), row=1, col=2
+        plot_vector(projection_x, f"{v[0]} * e1", "blue"), row=1, col=2
     )
-
     fig.add_trace(
-        plot_vector([0, 0], projection_y, f"{v[1]} * e2", "red"), row=1, col=2
+        plot_vector(projection_y, f"{v[1]} * e2", "red"), row=1, col=2
     )
 
     # Update layout settings
-
     fig.update_layout(
         title="2D Vectors in terms of basis vectors",
         width=1400,
@@ -107,17 +77,12 @@ def plot_basis_vectors_and_projection(e1, e2, v):
     )
 
     # Set axis ranges for both subplots
-
     fig.update_xaxes(range=[-5, 5], row=1, col=1)
-
     fig.update_yaxes(range=[-5, 5], row=1, col=1)
-
     fig.update_xaxes(range=[-5, 5], row=1, col=2)
-
     fig.update_yaxes(range=[-5, 5], row=1, col=2)
 
     # Show the plot
-
     fig.show()
 
 
@@ -127,29 +92,20 @@ def plot_basis_vectors_and_projection(e1, e2, v):
 def plot_span_of_vectors(basis_vector1, basis_vector2, range_val=5, grid_size=20):
 
     # Generate linear combinations of the basis vectors
-
     a_values = np.linspace(-range_val, range_val, grid_size)  # Coefficients for v1
-
     b_values = np.linspace(-range_val, range_val, grid_size)  # Coefficients for v2
-
+    
     # Generate all linear combinations
-
     span_points = []
-
     for a in a_values:
-
         for b in b_values:
-
             span_points.append(a * basis_vector1 + b * basis_vector2)
-
     span_points = np.array(span_points)
 
     # Create the Plotly plot
-
     fig = go.Figure()
 
     # Add the first basis vector
-
     fig.add_trace(
         go.Scatter(
             x=[0, basis_vector1[0]],
@@ -162,7 +118,6 @@ def plot_span_of_vectors(basis_vector1, basis_vector2, range_val=5, grid_size=20
     )
 
     # Add the second basis vector
-
     fig.add_trace(
         go.Scatter(
             x=[0, basis_vector2[0]],
@@ -175,7 +130,6 @@ def plot_span_of_vectors(basis_vector1, basis_vector2, range_val=5, grid_size=20
     )
 
     # Add points that represent the span of v1 and v2
-
     fig.add_trace(
         go.Scatter(
             x=span_points[:, 0],
@@ -187,7 +141,6 @@ def plot_span_of_vectors(basis_vector1, basis_vector2, range_val=5, grid_size=20
     )
 
     # Update layout settings
-
     fig.update_layout(
         title="Span of Two Arbitrary Vectors in 2D",
         xaxis=dict(range=[-range_val, range_val], zeroline=True),
@@ -199,22 +152,7 @@ def plot_span_of_vectors(basis_vector1, basis_vector2, range_val=5, grid_size=20
     )
 
     # Show the plot
-
     fig.show()
-
-
-# Define the plot_vector function for 3D vectors
-def plot_vector_3d(start, vector, name, color):
-    return go.Scatter3d(
-        x=[start[0], start[0] + vector[0]],  # From the start position to the vector tip
-        y=[start[1], start[1] + vector[1]],
-        z=[start[2], start[2] + vector[2]],
-        mode="lines+markers+text",
-        marker=dict(size=5, color=color),
-        line=dict(width=3, color=color),
-        text=[None, name],
-        textposition="top center",
-    )
 
 
 # Function to plot basis vectors and a given vector in their 3D coordinate system
@@ -241,20 +179,20 @@ def plot_basis_vectors_and_projection_3d(e1, e2, e3, v):
     )
 
     # Plot basis vectors in the first subplot
-    fig.add_trace(plot_vector_3d([0, 0, 0], e1, "e1", "blue"), row=1, col=1)
-    fig.add_trace(plot_vector_3d([0, 0, 0], e2, "e2", "red"), row=1, col=1)
-    fig.add_trace(plot_vector_3d([0, 0, 0], e3, "e3", "green"), row=1, col=1)
+    fig.add_trace(plot_vector_3d(e1, "e1", "blue"), row=1, col=1)
+    fig.add_trace(plot_vector_3d(e2, "e2", "red"), row=1, col=1)
+    fig.add_trace(plot_vector_3d(e3, "e3", "green"), row=1, col=1)
 
     # Plot the original vector and its projections in the second subplot
-    fig.add_trace(plot_vector_3d([0, 0, 0], result, f"v={v}", "purple"), row=1, col=2)
+    fig.add_trace(plot_vector_3d(result, f"v={v}", "purple"), row=1, col=2)
     fig.add_trace(
-        plot_vector_3d([0, 0, 0], projection_x, f"{v[0]} * e1", "blue"), row=1, col=2
+        plot_vector_3d(projection_x, f"{v[0]} * e1", "blue"), row=1, col=2
     )
     fig.add_trace(
-        plot_vector_3d([0, 0, 0], projection_y, f"{v[1]} * e2", "red"), row=1, col=2
+        plot_vector_3d(projection_y, f"{v[1]} * e2", "red"), row=1, col=2
     )
     fig.add_trace(
-        plot_vector_3d([0, 0, 0], projection_z, f"{v[2]} * e3", "green"), row=1, col=2
+        plot_vector_3d(projection_z, f"{v[2]} * e3", "green"), row=1, col=2
     )
 
     # Update layout settings
